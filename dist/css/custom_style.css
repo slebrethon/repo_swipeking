@@ -1,0 +1,65 @@
+/* style GLOBAL
+------------------------------------------------------------------------------------------------------*/
+:root {
+  --bs-body-font-family: 'Elms Sans', sans-serif;
+  font-size: 15px;
+  body {
+    background: var(--bs-white) !important;
+  }
+}
+
+/* style RANKING
+------------------------------------------------------------------------------------------------------*/
+.wrapper_appranking {
+  h3 {
+    span {
+      font-size: 1rem;
+    }
+  }
+}
+.wrapper_appgaming {
+  .time_bonus {
+    z-index: 1000;
+    opacity: 0;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+    &.show {
+      opacity: 1;
+      transform: scale(2);
+    }
+  }
+  .content_zone {
+    position: relative;
+    width: 110px;
+    height: 425px;
+    background: linear-gradient(180deg, #220000, #111, #010);
+    transition: transform 0.3s ease;
+    &.horizontal {
+      transform: rotate(90deg);
+    }
+  }
+  .swipe_zone {
+    height: 200%;
+    background: repeating-linear-gradient(to bottom, var(--bs-warning), var(--bs-warning) 10px, var(--bs-dark) 10px, var(--bs-dark) 20px);
+  }
+}
+
+#end {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  gap: 12px;
+}
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}

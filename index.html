@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>app - SWIPEKING</title>
+    <!-- connect GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- appel CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- content MENU -->
+    <div class="container-sm g-0 bg-dark vh-100 d-flex flex-column justify-content-between wrapper_appmenu">
+      <!-- bloc CTA -->
+      <div class="row g-0" id="startScreen">
+        <div class="col-8 offset-2 text-center mt-5">
+          <h1 class="text-white p-0 m-0">SwipeKing</h1>
+          <p class="text-white p-0 m-0 fst-italic"><small>A game by Alexandre Baranger V0.024</small></p>
+        </div>
+      </div>
+      <!-- bloc CTA -->
+      <div class="row g-0">
+        <div class="col-6 offset-3 d-flex flex-column justify-content-center align-content-center">
+          <button id="startButton" class="btn btn-warning w-100">start</button>
+          <a href="ranking.html" class="btn btn-outline-primary w-100 my-3">ranking</a>
+        </div>
+      </div>
+      <!-- bloc INFO -->
+      <div class="row g-0">
+        <div id="topbar" class="col-12 bg-warning pt-3">
+          <div class="row g-0">
+            <div class="col-12 d-flex flex-row justify-content-center">
+              <p id="activeRooms" class="text-dark p-0 m-0"></p>
+              <p id="swipeVisits" class="text-dark border border-dark border-top-0 border-bottom-0 p-0 m-0 px-3 mx-3"></p>
+              <p id="ropeVisits" class="text-dark p-0 m-0"></p>
+            </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-12 text-center my-4">
+              <a href="https://discord.gg/5VQBwXGWka" target="_blank" class="btn btn-primary bs-blue border-0"> <i class="fa-brands fa-discord"></i> Discord Alerts </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- appel JS -->
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+      import { getFirestore, collection, getDocs, query, orderBy, limit, doc, getDoc } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+      import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+      const firebaseConfig = {
+        apiKey: 'AIzaSyB6z3ajkXJr7NIj7PmAkREA9uieAttGyk0',
+        authDomain: 'swipe-king-6f95b.firebaseapp.com',
+        projectId: 'swipe-king-6f95b',
+        storageBucket: 'swipe-king-6f95b.firebasestorage.app',
+        messagingSenderId: '149048703091',
+        appId: '1:149048703091:web:8bd7b61d44648fd4a7d206',
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      await signInAnonymously(auth);
+      const db = getFirestore(app);
+
+      /* nav GAME */
+      document.getElementById('startButton').addEventListener('click', () => {
+        window.location.href = 'game.html';
+      });
+
+      /* script FIREBASE */
+      async function updateActiveRooms() {
+        const snap = await getDocs(collection(db, 'rooms_1v1'));
+        document.getElementById('activeRooms').textContent = 'Active Rope : ' + snap.size;
+      }
+      async function updateSwipeVisits() {
+        const ref = doc(db, 'stats', 'global');
+        const snap = await getDoc(ref);
+        const v = snap.exists() ? (snap.data()?.visits ?? 0) : 0;
+        document.getElementById('swipeVisits').textContent = 'Swipe King : ' + v;
+      }
+      async function updateRopeVisits() {
+        const ref = doc(db, 'statsropesolo', 'global');
+        const snap = await getDoc(ref);
+        const v = snap.exists() ? (snap.data()?.visits ?? 0) : 0;
+        document.getElementById('ropeVisits').textContent = 'Rope Solo : ' + v;
+      }
+      async function refresh() {
+        await updateActiveRooms();
+        await updateSwipeVisits();
+        await updateRopeVisits();
+        await updateSwipeTop();
+        await updateRopeTop10();
+      }
+      refresh();
+      setInterval(refresh, 5000);
+    </script>
+    <script src="dist/js/bootstrap.bundle.js"></script>
+  </body>
+</html>

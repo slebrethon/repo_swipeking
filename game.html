@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>app - SWIPEKING</title>
+    <!-- connect GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- appel CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- content GAMING -->
+    <div id="topbar" class="container-sm g-0 bg-dark vh-100 d-flex flex-column wrapper_appgaming">
+      <!-- bloc ID -->
+      <div class="row g-0">
+        <div class="col-12 d-flex flex-row justify-content-between">
+          <p id="counter" class="d-flex align-items-center text-white py-2 ps-4 pe-3 m-0"></p>
+          <p class="p-0 m-3"><a href="index.html" class="btn btn-warning px-4 py-3">quit</a></p>
+        </div>
+      </div>
+      <!-- bloc TITLE -->
+      <div class="row g-0">
+        <div class="col-12 text-center">
+          <h2 class="text-white p-0 m-0">SwipeKing</h2>
+          <p class="text-white p-0 m-0 fst-italic"><small>A game by Alexandre Baranger V0.024</small></p>
+        </div>
+      </div>
+      <!-- bloc GAME -->
+      <div id="game" class="row g-0">
+        <div class="col-12 my-5">
+          <div class="row g-0">
+            <div class="col-12 text-center">
+              <h1 id="distance" class="text-white fw-normal p-0 m-0">0 cm</h1>
+              <p id="timer" class="text-warning p-0 m-0">10.0 s</p>
+            </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-12 my-4 d-flex flex-column align-items-center justify-content-center">
+              <p id="timeBonus" class="position-absolute rounded-5 border border-warning bg-dark text-warning time_bonus p-3 m-0"></p>
+              <div id="arena" class="overflow-hidden rounded-2 content_zone">
+                <div id="rope" class="position-absolute w-100 swipe_zone"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div id="end"></div> -->
+    </div>
+
+    <!-- appel JS -->
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        query,
+        orderBy,
+        limit,
+        doc,
+        updateDoc,
+        increment,
+        getDoc,
+        setDoc,
+        deleteDoc,
+      } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+      import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+      const firebaseConfig = {
+        apiKey: 'AIzaSyB6z3ajkXJr7NIj7PmAkREA9uieAttGyk0',
+        authDomain: 'swipe-king-6f95b.firebaseapp.com',
+        projectId: 'swipe-king-6f95b',
+        storageBucket: 'swipe-king-6f95b.firebasestorage.app',
+        messagingSenderId: '149048703091',
+        appId: '1:149048703091:web:8bd7b61d44648fd4a7d206',
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      await signInAnonymously(auth);
+      const db = getFirestore(app);
+      window.saveScore = async (name, score) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        if (score < 0 || score > 50000) return;
+        await addDoc(collection(db, 'scores'), {
+          uid: user.uid,
+          name: name.substring(0, 20),
+          score,
+          date: Date.now(),
+        });
+        const q = query(collection(db, 'scores'), orderBy('score', 'desc'));
+        const snap = await getDocs(q);
+        const docs = snap.docs;
+        if (docs.length > 10) {
+          const toDelete = docs.slice(10);
+          for (const d of toDelete) {
+            await deleteDoc(doc(db, 'scores', d.id));
+          }
+        }
+      };
+      window.getScores = async () => {
+        const q = query(collection(db, 'scores'), orderBy('score', 'desc'), limit(10));
+        const snap = await getDocs(q);
+        let html = '';
+        snap.forEach((d) => {
+          let s = d.data();
+          html += `<div>${s.name} - ${s.score} cm</div>`;
+        });
+        return html;
+      };
+      window.incrementVisits = async () => {
+        const ref = doc(db, 'stats', 'global');
+        try {
+          const snap = await getDoc(ref);
+          if (!snap.exists()) {
+            await setDoc(ref, { visits: 1 });
+            return 1;
+          }
+          const current = snap.data()?.visits ?? 0;
+          await setDoc(ref, { visits: current + 1 });
+          return current + 1;
+        } catch (e) {
+          console.error('VISITS ERROR:', e);
+          return 0;
+        }
+      };
+    </script>
+    <script src="dist/js/js_game.js"></script>
+    <script src="dist/js/bootstrap.bundle.js"></script>
+  </body>
+</html>
