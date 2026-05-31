@@ -5,6 +5,8 @@
 SWIPEKING est une application web de jeu basée sur un prototype HTML/CSS/JavaScript.
 Le jeu propose un écran d'accueil, un écran de jeu et un écran de classement, avec des données stockées et lues via Firebase.
 
+url - https://slebrethon.github.io/repo_swipeking/
+
 ## Pages principales
 
 ### `index.html`
