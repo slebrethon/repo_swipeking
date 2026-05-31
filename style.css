@@ -1,0 +1,14 @@
+/* appel BOOTSTRAP */
+@import url(dist/css/bootstrap.css);
+
+/* appel FONT */
+@import url(dist/css/font_fontawesome.css);
+@import url(dist/css/font_googleemls.css);
+
+/* appel STYLE */
+@import url(dist/css/custom_style.css);
+
+/* Forcer un fond blanc sur la page (prioritaire sur les styles inline du script) */
+body {
+  background: #ffffff !important;
+}
