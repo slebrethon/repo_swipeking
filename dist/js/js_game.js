@@ -12,7 +12,7 @@ let lastMode = 'vertical';
 let transitionPause = false;
 let playerName = 'Anonyme';
 let enemyForce = 0.1;
-let timeLeft = 100;
+let timeLeft = 10;
 let lastFrame = performance.now();
 let bonusCount = 0;
 
