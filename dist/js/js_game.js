@@ -213,22 +213,63 @@ function loop() {
 // =========================
 // GAME OVER
 // =========================
+let scoreToSave = 0;
+let isWaitingForPseudo = false;
+
+function showPseudoModal(score) {
+  scoreToSave = score;
+  isWaitingForPseudo = true;
+  const pseudoInput = document.getElementById('pseudoInput');
+  pseudoInput.value = '';
+  pseudoInput.focus();
+
+  const pseudoModal = new (window.bootstrap?.Modal || window.Modal)(document.getElementById('pseudoModal'), { backdrop: 'static', keyboard: false });
+  pseudoModal.show();
+}
+
+document.getElementById('submitPseudoBtn').addEventListener('click', async () => {
+  if (!isWaitingForPseudo) return;
+
+  let name = document.getElementById('pseudoInput').value.trim();
+  if (!name) {
+    name = 'Anonyme';
+  }
+
+  isWaitingForPseudo = false;
+
+  // Fermer la modale
+  const pseudoModal = bootstrap.Modal.getInstance(document.getElementById('pseudoModal'));
+  if (pseudoModal) {
+    pseudoModal.hide();
+  }
+
+  // Sauvegarder et afficher les résultats
+  await saveScore(name, scoreToSave);
+  let leaderboard = await getScores();
+
+  document.getElementById('finalScore').textContent = scoreToSave + ' cm';
+  document.getElementById('leaderboardContainer').innerHTML = leaderboard;
+
+  const endContent = document.querySelector('.end-content');
+  if (endContent) {
+    endContent.classList.remove('d-none');
+  }
+});
+
+// Permettre Enter pour soumettre
+document.getElementById('pseudoInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    document.getElementById('submitPseudoBtn').click();
+  }
+});
+
 async function endGame() {
   if (gameOver) return;
   gameOver = true;
   let score = Math.floor(distance);
-  let name = prompt('Ton pseudo ?');
-  if (!name || name.trim() === '') {
-    name = 'Anonyme';
-  }
-  await saveScore(name, score);
-  let leaderboard = await getScores();
-  document.getElementById('end').style.display = 'flex';
-  document.getElementById('end').innerHTML = `
-<div>GAME OVER</div>
-<div style="font-size:2em">${score} cm</div>
-<div>${leaderboard}</div>
-<button onclick="location.reload()">Retry</button>`;
+
+  showPseudoModal(score);
+
   if (navigator.vibrate) {
     navigator.vibrate([200, 100, 200]);
   }

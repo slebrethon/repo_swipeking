@@ -39,7 +39,7 @@
           </div>
           <div class="row g-0">
             <div class="col-12 my-4 d-flex flex-column align-items-center justify-content-center">
-              <p id="timeBonus" class="position-absolute rounded-5 border border-warning bg-dark text-warning time_bonus p-3 m-0"></p>
+              <p id="timeBonus" class="position-absolute rounded-circle border border-3 border-warning bg-dark text-warning time_bonus p-3 m-0"></p>
               <div id="arena" class="overflow-hidden rounded-2 content_zone">
                 <div id="rope" class="position-absolute w-100 swipe_zone"></div>
               </div>
@@ -47,7 +47,40 @@
           </div>
         </div>
       </div>
-      <!-- <div id="end"></div> -->
+    </div>
+
+    <!-- content SCORING -->
+    <div id="end" class="container g-0 end-content d-none fixed-top h-100 bg-warning d-flex flex-column justify-content-center wrapper_appscoring">
+      <div class="row g-0">
+        <div class="col-10 offset-1 d-flex flex-column align-items-center">
+          <h2 class="text-dark p-0 m-0">GAME OVER</h2>
+          <p id="finalScore" class="d-flex justify-content-center bg-dark text-white fw-bold fs-2 px-5 py-2 my-2 rounded">0 cm</p>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-6 offset-3 py-4 text-center">
+          <h4 class="text-dark mb-3">Top 10</h4>
+          <div id="leaderboardContainer" class="text-dark table_scoring"></div>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-10 offset-1 text-center">
+          <button class="btn btn-dark my-5 px-5" onclick="location.reload()">Retry</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- content MODAL PSEUDO -->
+    <div class="modal fade" id="pseudoModal" tabindex="-1" aria-labelledby="pseudoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-white p-5">
+          <h5 class="text-dark p-0 m-0" id="pseudoModalLabel">Entrez votre pseudo</h5>
+          <input type="text" id="pseudoInput" class="bg-light border-0 form-control text-dark border-dark my-3" placeholder="Votre pseudo" />
+          <div class="d-flex flex-row justify-content-end">
+            <button type="button" class="w-25 btn btn-warning" id="submitPseudoBtn">Send</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- appel JS -->

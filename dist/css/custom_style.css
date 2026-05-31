@@ -44,22 +44,14 @@
     background: repeating-linear-gradient(to bottom, var(--bs-warning), var(--bs-warning) 10px, var(--bs-dark) 10px, var(--bs-dark) 20px);
   }
 }
-
-#end {
-  position: fixed;
-  inset: 0;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 9999;
-  gap: 12px;
-}
-button {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
+.wrapper_appscoring {
+  .table_scoring {
+    div {
+      padding: 0.3rem 0;
+      &:nth-child(odd) {
+        background-color: var(--bs-dark);
+        color: var(--bs-white);
+      }
+    }
+  }
 }
